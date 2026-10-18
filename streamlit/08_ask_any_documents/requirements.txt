@@ -1,4 +1,0 @@
-groq
-pypdf
-python-docx
-streamlit
