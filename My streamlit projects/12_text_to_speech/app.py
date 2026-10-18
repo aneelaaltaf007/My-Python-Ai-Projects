@@ -373,4 +373,4 @@ st.markdown(
 
 st.caption(
     "© 2026 Aneela Altaf. All rights reserved."
-)
+) 
