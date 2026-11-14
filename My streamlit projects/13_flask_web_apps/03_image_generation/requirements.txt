@@ -1,0 +1,5 @@
+
+Flask
+fal-client
+requests
+python-dotenv

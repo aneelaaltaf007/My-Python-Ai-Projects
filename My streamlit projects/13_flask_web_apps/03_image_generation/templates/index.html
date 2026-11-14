@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DALL·E 3 Image Generator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 30px 15px;
+            font-family: Arial, sans-serif;
+            color: #f5f5f5;
+            background: linear-gradient(135deg, #10101a, #242442);
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 30px;
+            text-align: center;
+            background: #191925;
+            border: 1px solid #393951;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        h1 {
+            color: #a99bff;
+        }
+
+        p {
+            color: #c9c9dc;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            margin: 20px 0;
+            padding: 15px;
+            color: white;
+            background: #10101a;
+            border: 1px solid #484863;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: 2px solid #8b78ff;
+        }
+
+        button,
+        .download-button {
+            display: inline-block;
+            padding: 13px 22px;
+            color: white;
+            background: #8b78ff;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover,
+        .download-button:hover {
+            background: #715ce8;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 12px;
+            color: #ffdada;
+            background: #49252d;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .result {
+            margin-top: 30px;
+        }
+
+        .result img {
+            width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #9999b0;
+            font-size: 13px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>🎨 DALL·E 3 Image Generator</h1>
+
+        <p>
+            Turn your imagination into an image.
+            Describe what you want to create.
+        </p>
+
+        <form method="POST" id="image-form">
+            <textarea
+                name="prompt"
+                placeholder="Describe your image..."
+                required
+            >{{ prompt }}</textarea>
+
+            <button type="submit" id="generate-button">
+                Generate Image
+            </button>
+        </form>
+
+        <div id="loading-message" hidden>
+            <p>⏳ Generating your image. Please wait...</p>
+        </div>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if image_filename %}
+            <section class="result">
+                <h2>Your Generated Image</h2>
+
+                <img
+                    src="{{ url_for('static', filename='generated/' + image_filename) }}"
+                    alt="AI-generated image"
+                >
+
+                <a
+                    class="download-button"
+                    href="{{ url_for('download_image', filename=image_filename) }}"
+                >
+                    ⬇ Download Image
+                </a>
+            </section>
+        {% endif %}
+
+        <div class="footer">
+            Powered by Flask and OpenAI
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById("image-form");
+        const button = document.getElementById("generate-button");
+        const loading = document.getElementById("loading-message");
+
+        form.addEventListener("submit", function () {
+            button.disabled = true;
+            button.textContent = "Generating...";
+            loading.hidden = false;
+        });
+    </script>
+</body>
+</html>
